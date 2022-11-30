@@ -5,10 +5,11 @@ using UnityEngine;
 
 public class PlayerDamage : MonoBehaviour
 {
+    private GameManager _gameManager;
     // Start is called before the first frame update
     void Start()
     {
-        
+        _gameManager = FindObjectOfType<GameManager>();
     }
 
     // Update is called once per frame
@@ -19,6 +20,6 @@ public class PlayerDamage : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        
+        _gameManager.Damage();
     }
 }
