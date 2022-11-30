@@ -22,15 +22,21 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private Button btnReiniciar;
 
+    [SerializeField] private TextMeshProUGUI txtPoints;
+
     public static GameManager instance;
+    [SerializeField] private GameObject[] _hpsImages;
+    private int points;
+    private int points2;
+    private int dmg;
     private void Awake()
     {
-        if(instance != null && instance != this)
+        if (instance != null && instance != this)
         {
             Debug.Log("A");
             Destroy(gameObject);
             instance.InitLevel();
-        } 
+        }
         else
         {
             instance = this;
@@ -47,13 +53,15 @@ public class GameManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+
     }
 
     public void Damage()
     {
         hp--;
         Debug.Log(hp);
+        UpdateHp();
+        dmg++;
         if (hp <= 0)
         {
             win = false;
@@ -69,14 +77,19 @@ public class GameManager : MonoBehaviour
     public void HpUp(int num)
     {
         hp += num;
+        points += 100;
+        txtPoints.text = "Points: " + points;
         Debug.Log(hp);
+        UpdateHp();
     }
-    
+
     public void Goal()
     {
         win = true;
 
-        //points
+        //500 points for finishing lvl - 20 x damage received on that lvl
+        points += 500 - (20 * dmg);
+        txtPoints.text = "Points: " + points;
         if (level == 1)
         {
             EndLevel("Congratulations, go to next level.");
@@ -105,8 +118,9 @@ public class GameManager : MonoBehaviour
             level = 2;
             SceneManager.LoadScene("Level 2");
             ogHp = hp;
-            //points
-        } else if (level == 2 && !win)
+            points2 = points;
+        }
+        else if (level == 2 && !win)
         {
             SceneManager.LoadScene("GameOver");
         }
@@ -115,7 +129,7 @@ public class GameManager : MonoBehaviour
             level = 1;
             SceneManager.LoadScene("GameOver");
         }
-        
+
     }
 
     public void InitLevel()
@@ -126,15 +140,27 @@ public class GameManager : MonoBehaviour
         txtWin.gameObject.SetActive(false);
         btnReiniciar.gameObject.SetActive(false);
         Time.timeScale = 1.0f;
-
+        
         if (level == 1)
         {
             ogHp = 3;
-            //points 0
+            points2 = 0;
         }
-        //points = p2
+
+        dmg = 0;
+        points = points2;
         hp = ogHp;
 
+        UpdateHp();
+
+
+        txtPoints.text = "Points: " + points;
+        /*Vector3 offset = new Vector3(0,0,0);
+        for (int i = 0; i < hp; i++)
+        {
+            Instantiate(_hpImage, _imgSpawn.transform.position + offset, Quaternion.identity);
+            offset.x += 100;
+        }/*
         //StartCoroutine(LateStart());
     }
 
@@ -143,4 +169,19 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(0.01f);
         _player = GameObject.FindWithTag("Player");
     }*/
+    }
+
+
+    private void UpdateHp()
+    {
+        foreach (var obj in _hpsImages)
+        {
+            obj.SetActive(false);
+        }
+        
+        for (int i = 0; i < hp; i++)
+        {
+            _hpsImages[i].SetActive(true);
+        }
+    }
 }
