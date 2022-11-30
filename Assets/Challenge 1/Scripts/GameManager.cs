@@ -71,6 +71,8 @@ public class GameManager : MonoBehaviour
         {
             _player.transform.rotation = Quaternion.identity;
             _player.transform.position = Vector3.zero;
+            _player.GetComponent<Rigidbody>().velocity = Vector3.zero;
+            _player.GetComponent<Rigidbody>().angularVelocity = Vector3.zero; 
         }
     }
 
