@@ -20,6 +20,14 @@ public class PlayerDamage : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-        _gameManager.Damage();
+        if (collision.gameObject.CompareTag("Goal"))
+        {
+            _gameManager.Goal();
+        }
+        else
+        { 
+            _gameManager.Damage(); 
+        }
+        
     }
 }
