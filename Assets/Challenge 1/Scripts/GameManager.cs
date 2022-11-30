@@ -41,7 +41,7 @@ public class GameManager : MonoBehaviour
     void Start()
     {
         btnReiniciar.onClick.AddListener(GameOver);
-      
+        InitLevel();
     }
 
     // Update is called once per frame
@@ -66,6 +66,12 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    public void HpUp(int num)
+    {
+        hp += num;
+        Debug.Log(hp);
+    }
+    
     public void Goal()
     {
         win = true;
